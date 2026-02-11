@@ -14,52 +14,53 @@
 
 <body class="sb-nav-fixed">
 
-    {{-- TOP NAVBAR --}}
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand ps-3" href="#">SIPINJAM</a>
+{{-- TOP NAVBAR --}}
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <a class="navbar-brand ps-3" href="{{ route('petugas.dashboard') }}">SIPINJAM</a>
 
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
-            <i class="fas fa-bars"></i>
-        </button>
+    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
+    </button>
 
-        <ul class="navbar-nav ms-auto me-3">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fas fa-user fa-fw"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </nav>
+    <ul class="navbar-nav ms-auto me-3">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-user fa-fw"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            Logout
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>
 
-    {{-- LAYOUT --}}
-    <div id="layoutSidenav">
+{{-- LAYOUT --}}
+<div id="layoutSidenav">
 
-        {{-- SIDEBAR PETUGAS --}}
+    {{-- SIDEBAR --}}
+    <div id="layoutSidenav_nav">
         @include('partials.sidebar-petugas')
-
-        {{-- CONTENT --}}
-        <div id="layoutSidenav_content">
-            <main class="p-4">
-                {{-- INI YANG WAJIB ADA --}}
-                @yield('content')
-            </main>
-        </div>
-
     </div>
 
-    {{-- JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('admin_template/startbootstrap-sb-admin-gh-pages/js/scripts.js') }}"></script>
+    {{-- CONTENT --}}
+    <div id="layoutSidenav_content">
+        <main class="p-4">
+            @yield('content')
+        </main>
+    </div>
+
+</div>
+
+{{-- JS --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('admin_template/startbootstrap-sb-admin-gh-pages/js/scripts.js') }}"></script>
 
 </body>
 </html>

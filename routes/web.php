@@ -2,15 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+//admin
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\KategoriController;
-use App\Http\Controllers\Admin\PeminjamanController;
+use App\Http\Controllers\Admin\PeminjamanController as AdminPeminjamanController;
 use App\Http\Controllers\Admin\PengembalianController;
 use App\Http\Controllers\Admin\LaporanController;
 use App\Http\Controllers\Admin\AdminActivityController;
+//petugas
 use App\Http\Controllers\Petugas\PetugasDashboardController;
-use App\Http\Controllers\Peminjaman\PeminjamDashboardController;
+use App\Http\Controllers\Petugas\PeminjamanController as PetugasPeminjamanController; 
+use App\Http\Controllers\Petugas\PengembalianController as PetugasPengembalianController;
+
+//peminjam
+use App\Http\Controllers\Peminjaman\PeminjamDashboardController; 
+use App\Http\Controllers\Peminjaman\PeminjamController;
+use App\Http\Controllers\Peminjaman\PeminjamanController;
+use App\Http\Controllers\Peminjaman\AlatController;
+use App\Http\Controllers\Peminjaman\RiwayatPeminjamanController;
+
 
 
 
@@ -57,13 +68,14 @@ Route::middleware(['auth', 'role:admin'])
         Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 
         // Peminjaman
-        Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
-        Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
-        Route::put('/peminjaman/{id}', [PeminjamanController::class, 'update'])->name('peminjaman.update');
-        Route::delete('/peminjaman/{id}', [PeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
+        Route::get('/peminjaman', [AdminPeminjamanController::class, 'index'])->name('peminjaman.index');
+        Route::post('/peminjaman', [AdminPeminjamanController::class, 'store'])->name('peminjaman.store');
+        Route::put('/peminjaman/{id}', [AdminPeminjamanController::class, 'update'])->name('peminjaman.update');
+        Route::delete('/peminjaman/{id}', [AdminPeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
 
         // Pengembalian
         Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
+        Route::get('/pengembalian/{id}/edit', [PengembalianController::class, 'edit'])->name('pengembalian.edit');
         Route::put('/pengembalian/{id}', [PengembalianController::class, 'update'])->name('pengembalian.update');
         Route::delete('/pengembalian/{id}', [PengembalianController::class, 'destroy'])->name('pengembalian.destroy');
 
@@ -83,6 +95,26 @@ Route::middleware(['auth', 'role:petugas'])
 
         Route::get('/dashboard', [PetugasDashboardController::class, 'index'])
             ->name('dashboard');
+
+        //peminjaman
+        Route::get('/peminjaman', [PetugasPeminjamanController::class, 'index'])
+        ->name('peminjaman.index');
+
+        Route::put('/peminjaman/{id}/kembali', [PetugasPeminjamanController::class, 'kembali'])
+        ->name('peminjaman.kembali');
+
+        Route::put('/peminjaman/{id}/setujui', [PetugasPeminjamanController::class, 'setujui'])
+        ->name('peminjaman.setujui');
+
+        //pengembalian
+        Route::get('/pengembalian', [PetugasPengembalianController::class, 'index'])
+            ->name('pengembalian.index');
+
+        //laporan
+        Route::get('/laporan', [PetugasPeminjamanController::class, 'laporan'])
+        ->name('laporan');
+
+
     });
 
 // ================= PEMINJAM =================
@@ -93,4 +125,16 @@ Route::middleware(['auth', 'role:peminjam'])
 
         Route::get('/dashboard', [PeminjamDashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('/alat', [AlatController::class, 'index'])
+            ->name('alat.index');
+
+        Route::post('/peminjaman', [PeminjamanController::class, 'store'])
+        ->name('peminjaman.store');
+
+        // Riwayat Peminjaman
+        Route::get('/riwayat', [RiwayatPeminjamanController::class, 'index'])
+            ->name('peminjaman.index'); // <-- ini untuk sidebar "Riwayat Peminjaman"
+
+
     });
