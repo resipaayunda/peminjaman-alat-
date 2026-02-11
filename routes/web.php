@@ -83,7 +83,7 @@ Route::middleware(['auth', 'role:admin'])
         Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
 
         // Log Aktivitas
-        Route::get('/activities', [AdminActivityController::class, 'index'])->name('activities.index');
+        Route::get('/activities', [AdminActivityController::class, 'index'])->name('activities.index'); //activities.index
     });
 
 

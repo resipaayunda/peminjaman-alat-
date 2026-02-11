@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use App\Models\AdminActivity;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -29,6 +30,14 @@ class AuthenticatedSessionController extends Controller
         // Ambil user yang login
         $user = Auth::user();
 
+        // ✅ SIMPAN LOG LOGIN
+        AdminActivity::create([
+            'admin_id' => $user->id,
+            'action' => 'Login',
+            'model' => 'Authentication',
+            'description' => $user->name . ' berhasil login ke sistem',
+        ]);
+
         // Redirect berdasarkan role
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard')
@@ -48,6 +57,18 @@ class AuthenticatedSessionController extends Controller
     // Destroy an authenticated session.
     public function destroy(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
+        // ✅ SIMPAN LOG LOGOUT (opsional tapi bagus)
+        if ($user) {
+            AdminActivity::create([
+                'admin_id' => $user->id,
+                'action' => 'Logout',
+                'model' => 'Authentication',
+                'description' => $user->name . ' logout dari sistem',
+            ]);
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

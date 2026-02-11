@@ -11,9 +11,9 @@ class PengembalianController extends Controller
 {
     public function index()
     {
-        $pengembalians = Peminjaman::where('status', '!=', 'dipinjam')
-            ->orderBy('tanggal_kembali', 'desc')
-            ->get();
+        $pengembalians = Peminjaman::whereNotNull('tanggal_kembali')
+        ->orderBy('tanggal_kembali', 'desc')
+        ->get();
 
         return view('admin.pengembalian', compact('pengembalians'));
     }
@@ -45,7 +45,7 @@ class PengembalianController extends Controller
             ]);
 
             return redirect()
-                ->route('pengembalian.index')
+                ->route('admin.pengembalian.index')
                 ->with('success', 'Data pengembalian berhasil diupdate');
 
         } catch (\Exception $e) {
@@ -58,20 +58,14 @@ class PengembalianController extends Controller
 
     public function destroy($id)
     {
-        try {
+            try {
             $pengembalian = Peminjaman::findOrFail($id);
-            
-            // Ubah status kembali ke dipinjam
-            $pengembalian->update([
-                'status' => 'dipinjam',
-                'tanggal_kembali' => null,
-                'kondisi_alat' => null,
-                'keterangan' => null,
-            ]);
+
+            $pengembalian->delete(); // BENAR-BENAR HAPUS
 
             return redirect()
                 ->route('admin.pengembalian.index')
-                ->with('success', 'Data pengembalian berhasil dihapus');
+                ->with('success', 'Riwayat pengembalian berhasil dihapus');
 
         } catch (\Exception $e) {
             return redirect()

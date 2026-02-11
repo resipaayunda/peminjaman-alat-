@@ -8,12 +8,12 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('admin_activities', function (Blueprint $table) {
+        Schema::create('activity_logs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('admin_id'); // siapa admin yang melakukan
-            $table->string('action'); // aksi (create, update, delete, login, dsb)
-            $table->string('model')->nullable(); // model / entitas terkait
-            $table->text('description')->nullable(); // keterangan lebih detail
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('aksi');
+            $table->string('modul');
+            $table->string('status')->default('Berhasil');
             $table->timestamps();
 
             // foreign key ke users
