@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Peminjaman;
 
 use App\Http\Controllers\Controller;
-use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use App\Models\Peminjaman;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\LaporanExport;
-use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Peminjaman::with(['user', 'barang'])->latest();
+        $query = Peminjaman::latest();
 
-        // FILTER
         if ($request->filter && $request->tanggal) {
 
             if ($request->filter == 'hari') {
@@ -37,21 +34,20 @@ class LaporanController extends Controller
 
         $laporans = $query->get();
 
-        return view('admin.laporan', compact('laporans'));
+        return view('peminjam.laporan', compact('laporans'));
     }
 
     public function exportPdf(Request $request)
     {
-        $query = Peminjaman::with(['user', 'barang']);
+        $query = Peminjaman::latest();
 
-        // FILTER
         if ($request->filter && $request->tanggal) {
 
             if ($request->filter == 'hari') {
                 $query->whereDate('tanggal_pinjam', $request->tanggal);
             }
 
-            // 🔥 TAMBAHAN RANGE
+            // 🔥 TAMBAHAN RANGE (PDF JUGA)
             elseif ($request->filter == 'minggu' || $request->filter == 'bulan') {
 
                 $start = Carbon::parse($request->tanggal)->startOfDay();
@@ -65,13 +61,8 @@ class LaporanController extends Controller
 
         $laporans = $query->get();
 
-        $pdf = Pdf::loadView('admin.laporan_pdf', compact('laporans'));
+        $pdf = Pdf::loadView('peminjam.laporan_pdf', compact('laporans'));
 
-        return $pdf->download('laporan-peminjaman.pdf');
-    }
-
-    public function exportExcel(Request $request)
-    {
-        return Excel::download(new LaporanExport($request), 'laporan-peminjaman.xlsx');
+        return $pdf->download('laporan_peminjaman_saya.pdf');
     }
 }

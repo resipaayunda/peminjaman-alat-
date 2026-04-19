@@ -5,23 +5,32 @@ use App\Http\Controllers\ProfileController;
 //admin
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\KategoriController;
+use App\Http\Controllers\Admin\KategoriController as AdminKategoriController;
 use App\Http\Controllers\Admin\PeminjamanController as AdminPeminjamanController;
-use App\Http\Controllers\Admin\PengembalianController;
-use App\Http\Controllers\Admin\LaporanController;
-use App\Http\Controllers\Admin\AdminActivityController;
+use App\Http\Controllers\Admin\PengembalianController as AdminPengembalianController; 
+use App\Http\Controllers\Admin\LaporanController as AdminLaporanController;
+use App\Http\Controllers\Admin\AdminActivityController as AdminAdminActivityController;
+use App\Http\Controllers\Admin\BarangController as AdminBarangController; 
+
 //petugas
 use App\Http\Controllers\Petugas\PetugasDashboardController;
 use App\Http\Controllers\Petugas\PeminjamanController as PetugasPeminjamanController; 
 use App\Http\Controllers\Petugas\PengembalianController as PetugasPengembalianController;
+use App\Http\Controllers\Petugas\LaporanController as PetugasLaporanController;
+use App\Http\Controllers\Petugas\PetugasActivityController as PetugasPetugasActivityController;
+use App\Http\Controllers\Petugas\BarangController as PetugasBarangController;
+use App\Http\Controllers\Petugas\KategoriController as PetugasKategoriController;
+
 
 //peminjam
 use App\Http\Controllers\Peminjaman\PeminjamDashboardController; 
 use App\Http\Controllers\Peminjaman\PeminjamController;
 use App\Http\Controllers\Peminjaman\PeminjamanController;
 use App\Http\Controllers\Peminjaman\AlatController;
+use App\Http\Controllers\Peminjaman\PengembalianController as PeminjamPengembalianController; 
 use App\Http\Controllers\Peminjaman\RiwayatPeminjamanController;
-
+use App\Http\Controllers\Peminjaman\LaporanController as PeminjamLaporanController;
+use App\Http\Controllers\Peminjaman\PeminjamActivityController;
 
 
 
@@ -62,10 +71,16 @@ Route::middleware(['auth', 'role:admin'])
         Route::delete('/users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
 
         // Kategori
-        Route::get('/kategori', [KategoriController::class, 'index'])->name('kategori.index');
-        Route::post('/kategori', [KategoriController::class, 'store'])->name('kategori.store');
-        Route::put('/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
-        Route::delete('/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+        Route::get('/kategori', [AdminKategoriController::class, 'index'])->name('kategori.index');
+        Route::post('/kategori', [AdminKategoriController::class, 'store'])->name('kategori.store');
+        Route::put('/kategori/{id}', [AdminKategoriController::class, 'update'])->name('kategori.update');
+        Route::delete('/kategori/{id}', [AdminKategoriController::class, 'destroy'])->name('kategori.destroy');
+
+        // Barang 
+        Route::get('/barang', [AdminBarangController::class, 'index'])->name('barang.index');
+        Route::post('/barang', [AdminBarangController::class, 'store'])->name('barang.store');
+        Route::put('/barang/{id}', [AdminBarangController::class, 'update'])->name('barang.update');
+        Route::delete('/barang/{id}', [AdminBarangController::class, 'destroy'])->name('barang.destroy');
 
         // Peminjaman
         Route::get('/peminjaman', [AdminPeminjamanController::class, 'index'])->name('peminjaman.index');
@@ -74,16 +89,18 @@ Route::middleware(['auth', 'role:admin'])
         Route::delete('/peminjaman/{id}', [AdminPeminjamanController::class, 'destroy'])->name('peminjaman.destroy');
 
         // Pengembalian
-        Route::get('/pengembalian', [PengembalianController::class, 'index'])->name('pengembalian.index');
-        Route::get('/pengembalian/{id}/edit', [PengembalianController::class, 'edit'])->name('pengembalian.edit');
-        Route::put('/pengembalian/{id}', [PengembalianController::class, 'update'])->name('pengembalian.update');
-        Route::delete('/pengembalian/{id}', [PengembalianController::class, 'destroy'])->name('pengembalian.destroy');
+        Route::get('/pengembalian', [AdminPengembalianController::class, 'index'])->name('pengembalian.index');
+        Route::get('/pengembalian/{id}/edit', [AdminPengembalianController::class, 'edit'])->name('pengembalian.edit');
+        Route::put('/pengembalian/{id}', [AdminPengembalianController::class, 'update'])->name('pengembalian.update');
+        Route::delete('/pengembalian/{id}', [AdminPengembalianController::class, 'destroy'])->name('pengembalian.destroy');
 
         // Laporan
-        Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+        Route::get('/laporan', [AdminLaporanController::class, 'index'])->name('laporan.index');
+        Route::get('/laporan/pdf', [AdminLaporanController::class, 'exportPdf'])->name('laporan.pdf');
+        Route::get('/laporan/excel', [AdminLaporanController::class, 'exportExcel'])->name('laporan.excel');
 
         // Log Aktivitas
-        Route::get('/activities', [AdminActivityController::class, 'index'])->name('activities.index'); //activities.index
+        Route::get('/activities', [AdminAdminActivityController::class, 'index'])->name('activities.index'); //activities.index
     });
 
 
@@ -96,6 +113,18 @@ Route::middleware(['auth', 'role:petugas'])
         Route::get('/dashboard', [PetugasDashboardController::class, 'index'])
             ->name('dashboard');
 
+        //Data Barang
+        Route::get('/barang', [PetugasBarangController::class, 'index'])->name('barang.index');
+        Route::post('/barang', [PetugasBarangController::class, 'store'])->name('barang.store');
+        Route::put('/barang/{id}', [PetugasBarangController::class, 'update'])->name('barang.update');
+        Route::delete('/barang/{id}', [PetugasBarangController::class, 'destroy'])->name('barang.destroy');
+
+        // Kategori
+        Route::get('/kategori', [PetugasKategoriController::class, 'index'])->name('kategori.index');
+        Route::post('/kategori', [PetugasKategoriController::class, 'store'])->name('kategori.store');
+        Route::put('/kategori/{id}', [PetugasKategoriController::class, 'update'])->name('kategori.update');
+        Route::delete('/kategori/{id}', [PetugasKategoriController::class, 'destroy'])->name('kategori.destroy');
+
         //peminjaman
         Route::get('/peminjaman', [PetugasPeminjamanController::class, 'index'])
         ->name('peminjaman.index');
@@ -106,13 +135,20 @@ Route::middleware(['auth', 'role:petugas'])
         Route::put('/peminjaman/{id}/setujui', [PetugasPeminjamanController::class, 'setujui'])
         ->name('peminjaman.setujui');
 
+        Route::put('/peminjaman/{id}/tolak', [PetugasPeminjamanController::class, 'tolak'])
+        ->name('peminjaman.tolak');
+
         //pengembalian
         Route::get('/pengembalian', [PetugasPengembalianController::class, 'index'])
             ->name('pengembalian.index');
 
         //laporan
-        Route::get('/laporan', [PetugasPeminjamanController::class, 'laporan'])
-        ->name('laporan');
+       Route::get('/laporan', [PetugasLaporanController::class, 'index'])->name('laporan');
+       Route::get('/laporan/pdf', [PetugasLaporanController::class, 'exportPdf'])->name('laporan.pdf');
+
+        //Log Activity
+        Route::get('/activities', [PetugasPetugasActivityController::class, 'index'])
+        ->name('petugas.activities');
 
 
     });
@@ -126,15 +162,36 @@ Route::middleware(['auth', 'role:peminjam'])
         Route::get('/dashboard', [PeminjamDashboardController::class, 'index'])
             ->name('dashboard');
 
+        // Alat & Peminjaman  
         Route::get('/alat', [AlatController::class, 'index'])
             ->name('alat.index');
 
-        Route::post('/peminjaman', [PeminjamanController::class, 'store'])
-        ->name('peminjaman.store');
+        Route::post('/alat/pinjam', [AlatController::class, 'store'])->name('alat.store'); // ✅ fix route store
+  
+        // Route::post('/peminjaman', [PeminjamanController::class, 'store'])
+        // ->name('peminjaman.store');
 
-        // Riwayat Peminjaman
+        //Riwayat Peminjaman
         Route::get('/riwayat', [RiwayatPeminjamanController::class, 'index'])
             ->name('peminjaman.index'); // <-- ini untuk sidebar "Riwayat Peminjaman"
+
+        // Pengembalian
+        Route::get('/pengembalian', [RiwayatPeminjamanController::class, 'pengembalian'])
+            ->name('pengembalian.index');
+
+        Route::post('/kembalikan/{id}', [PeminjamPengembalianController::class, 'kembalikan'])
+            ->name('peminjaman.kembalikan');
+
+        // Laporan
+        Route::get('/laporan', [PeminjamLaporanController::class, 'index'])
+            ->name('laporan.index');
+
+        Route::get('/laporan/pdf', [PeminjamLaporanController::class, 'exportPdf'])
+            ->name('laporan.pdf');
+
+        //Log Activitytas
+        Route::get('/activities', [PeminjamActivityController::class, 'index'])
+        ->name('activities');
 
 
     });

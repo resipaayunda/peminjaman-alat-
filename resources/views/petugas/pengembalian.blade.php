@@ -7,8 +7,8 @@
 
 <div class="container-fluid px-4">
     <div class="mt-4 mb-4">
-        <h1 class="h3 fw-bold text-gray-800">Riwayat Pengembalian</h1>
-        <p class="text-muted small">Daftar barang yang sudah berhasil dikembalikan ke gudang.</p>
+        <h1 class="h3 fw-bold text-gray-800">Monitoring Pengembalian</h1>
+        <p class="text-muted small">Daftar barang yang sudah berhasil dikembalikan</p>
     </div>
 
     {{-- STATISTIK RINGKAS --}}

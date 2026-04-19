@@ -73,4 +73,4 @@ class PengembalianController extends Controller
                 ->with('error', 'Gagal menghapus pengembalian: ' . $e->getMessage());
         }
     }
-}
+} 

@@ -12,8 +12,10 @@ class Peminjaman extends Model
     protected $table = 'peminjamen'; // ← PENTING (karena typo tabel)
 
     protected $fillable = [
+        'user_id', 
         'nama_peminjam',
         'barang',
+        'jumlah',
         'tanggal_pinjam',
         'jatuh_tempo',
         'tanggal_kembali',
@@ -29,6 +31,6 @@ class Peminjaman extends Model
 
     public function barang()
     {
-        return $this->belongsTo(Barang::class);
+        return $this->belongsTo(Barang::class, 'barang', 'nama_barang');
     }
 }

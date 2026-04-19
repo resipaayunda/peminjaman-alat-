@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.petugas')
 
 @section('content')
 <div class="container-fluid px-4">
@@ -10,17 +10,10 @@
             <!-- TAMBAHAN -->
             <div class="small text-muted mb-1">Cetak Laporan</div>
 
-            <div class="d-flex gap-2">
-                <a href="{{ route('admin.laporan.pdf', request()->all()) }}" 
-                   class="btn btn-outline-danger btn-sm">
-                    <i class="fas fa-file-pdf me-1"></i> PDF
-                </a>
-
-                <a href="{{ route('admin.laporan.excel', request()->all()) }}" 
-                   class="btn btn-outline-success btn-sm">
-                    <i class="fas fa-file-excel me-1"></i> Excel
-                </a>
-            </div>
+            <a href="{{ route('petugas.laporan.pdf', request()->all()) }}" 
+               class="btn btn-outline-danger btn-sm">
+                <i class="fas fa-file-pdf me-1"></i> PDF
+            </a>
         </div>
     </div>
 
@@ -55,7 +48,7 @@
                     </div>
 
                     <div class="col-md-1">
-                        <a href="{{ route('admin.laporan.index') }}" class="btn btn-secondary btn-sm w-100">
+                        <a href="{{ route('petugas.laporan') }}" class="btn btn-secondary btn-sm w-100">
                             Reset
                         </a>
                     </div>
@@ -123,7 +116,7 @@
 
 {{-- STYLE TAMBAHAN --}}
 <style>
-    /* FILTER WARNA HIJAU SOFT */
+    /* FILTER HIJAU SOFT */
     .filter-card {
         border-left: 5px solid #22c55e;
         background: #f0fdf4;
@@ -139,7 +132,7 @@
         box-shadow: 0 0 0 0.1rem rgba(34,197,94,0.2);
     }
 
-    /* HEADER TABEL KUNING SOFT */
+    /* HEADER TABEL KUNING */
     thead.table-warning {
         background-color: #fef9c3 !important;
     }

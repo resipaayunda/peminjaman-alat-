@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.petugas')
 
 @section('content')
 <div class="container-fluid px-4 pb-5">
@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form action="{{ route('admin.kategori.store') }}" method="POST">
+                    <form action="{{ route('petugas.kategori.store') }}" method="POST">
                         @csrf
 
                         <div class="mb-3">
@@ -62,8 +62,6 @@
                                     {{ $kategori->nama }}
                                 </td>
 
-                                
-
                                 <td class="text-center">
                                     <button class="btn btn-warning btn-sm"
                                             data-bs-toggle="collapse"
@@ -71,7 +69,7 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
 
-                                    <form action="{{ route('admin.kategori.destroy', $kategori->id) }}"
+                                    <form action="{{ route('petugas.kategori.destroy', $kategori->id) }}"
                                           method="POST"
                                           class="d-inline">
                                         @csrf
@@ -84,10 +82,10 @@
                                 </td>
                             </tr>
 
-                            {{-- FORM EDIT (MODEL BARANG STYLE) --}}
+                            {{-- FORM EDIT --}}
                             <tr class="collapse" id="editKategori{{ $kategori->id }}">
                                 <td colspan="4">
-                                    <form action="{{ route('admin.kategori.update', $kategori->id) }}"
+                                    <form action="{{ route('petugas.kategori.update', $kategori->id) }}"
                                           method="POST"
                                           class="d-flex gap-2">
                                         @csrf

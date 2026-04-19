@@ -6,7 +6,7 @@
 @endphp
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 mb-4 h3 fw-bold text-gray-800">Pengembalian</h1>
+    <h1 class="mt-4 mb-4 h3 fw-bold text-gray-800">Riwayat Pengembalian</h1>
 
     {{-- STATISTIK --}}
     <div class="row g-3 mb-4">
@@ -46,7 +46,8 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th class="ps-4">Nama</th>
+                            <th class="ps-4">No</th> {{-- ✅ TAMBAHAN --}}
+                            <th>Nama</th>
                             <th>Barang</th>
                             <th>Tgl Pinjam</th>
                             <th>Jatuh Tempo</th>
@@ -64,11 +65,15 @@
                             $tanggalKembali = Carbon::parse($p->tanggal_kembali);
                             $telat = $tanggalKembali->gt($jatuhTempo);
                             $hariTelat = $telat ? $tanggalKembali->diffInDays($jatuhTempo) : 0;
-                            $denda = $hariTelat * 10000;
+                            $denda = $hariTelat * 5000;
                         @endphp
 
                         <tr>
-                            <td class="ps-4 fw-bold">{{ $p->nama_peminjam }}</td>
+                            <td class="ps-4 text-muted">
+                                {{ $loop->iteration }}
+                            </td>
+
+                            <td class="fw-bold">{{ $p->nama_peminjam }}</td>
                             <td>{{ $p->barang }}</td>
                             <td>{{ Carbon::parse($p->tanggal_pinjam)->format('d M Y') }}</td>
                             <td>{{ $jatuhTempo->format('d M Y') }}</td>
@@ -161,7 +166,7 @@
 
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted py-4">
+                            <td colspan="9" class="text-center text-muted py-4">
                                 Belum ada data pengembalian
                             </td>
                         </tr>

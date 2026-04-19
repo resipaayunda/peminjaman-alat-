@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -11,7 +11,7 @@ class KategoriController extends Controller
     public function index()
     {
         $kategoris = Kategori::with('barangs')->get();
-        return view('admin.kategori', compact('kategoris'));
+        return view('petugas.kategori', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -24,8 +24,8 @@ class KategoriController extends Controller
             'nama' => $request->nama
         ]);
 
-        return redirect()->route('admin.kategori.index')
-            ->with('success', 'Kategori berhasil ditambahkan');    
+        return redirect()->route('petugas.kategori.index')
+            ->with('success', 'Kategori berhasil ditambahkan');
     }
 
     public function update(Request $request, $id)

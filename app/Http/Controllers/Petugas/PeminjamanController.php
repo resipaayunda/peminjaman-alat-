@@ -15,16 +15,40 @@ class PeminjamanController extends Controller
         return view('petugas.peminjaman', compact('peminjamans'));
     }
 
-    // TAMBAHAN WAJIB (ini yang bikin error kamu)
-    public function kembali($id)
+    // ✅ ACC
+    public function setujui($id)
     {
-        $peminjaman = Peminjaman::findOrFail($id);
+        $p = Peminjaman::findOrFail($id);
 
-        $peminjaman->update([
-            'tanggal_kembali' => now(),
-            'status' => 'kembali'
+        $p->update([
+            'status' => 'dipinjam'
         ]);
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil dikonfirmasi');
+        return back()->with('success', 'Peminjaman disetujui');
+    }
+
+    // ❌ TOLAK
+    public function tolak($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+
+        $p->update([
+            'status' => 'ditolak'
+        ]);
+
+        return back()->with('success', 'Peminjaman ditolak');
+    }
+
+    // 🔄 SELESAI
+    public function kembali($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+
+        $p->update([
+            'tanggal_kembali' => now(),
+            'status' => 'selesai'
+        ]);
+
+        return back()->with('success', 'Pengembalian dikonfirmasi');
     }
 }

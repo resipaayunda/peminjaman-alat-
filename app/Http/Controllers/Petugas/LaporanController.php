@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\LaporanExport;
-use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class LaporanController extends Controller
@@ -23,7 +21,6 @@ class LaporanController extends Controller
                 $query->whereDate('tanggal_pinjam', $request->tanggal);
             }
 
-            // 🔥 TAMBAHAN RANGE
             elseif ($request->filter == 'minggu' || $request->filter == 'bulan') {
 
                 $start = Carbon::parse($request->tanggal)->startOfDay();
@@ -37,21 +34,20 @@ class LaporanController extends Controller
 
         $laporans = $query->get();
 
-        return view('admin.laporan', compact('laporans'));
+        return view('petugas.laporan', compact('laporans'));
     }
 
     public function exportPdf(Request $request)
     {
-        $query = Peminjaman::with(['user', 'barang']);
+        $query = Peminjaman::with(['user', 'barang'])->latest();
 
-        // FILTER
+        // FILTER (BIAR PDF IKUT KEFILTER)
         if ($request->filter && $request->tanggal) {
 
             if ($request->filter == 'hari') {
                 $query->whereDate('tanggal_pinjam', $request->tanggal);
             }
 
-            // 🔥 TAMBAHAN RANGE
             elseif ($request->filter == 'minggu' || $request->filter == 'bulan') {
 
                 $start = Carbon::parse($request->tanggal)->startOfDay();
@@ -65,13 +61,8 @@ class LaporanController extends Controller
 
         $laporans = $query->get();
 
-        $pdf = Pdf::loadView('admin.laporan_pdf', compact('laporans'));
+        $pdf = Pdf::loadView('petugas.laporan_pdf', compact('laporans'));
 
         return $pdf->download('laporan-peminjaman.pdf');
-    }
-
-    public function exportExcel(Request $request)
-    {
-        return Excel::download(new LaporanExport($request), 'laporan-peminjaman.xlsx');
     }
 }

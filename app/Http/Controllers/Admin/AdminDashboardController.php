@@ -10,28 +10,37 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        $today = Carbon::today();
+        // Ambil semua data
+        $peminjamans = Peminjaman::latest()->get();
 
-        // Total peminjaman aktif (belum dikembalikan)
-        $totalPeminjaman = Peminjaman::whereNull('tanggal_kembali')->count();
+        // Total peminjaman
+        $totalPeminjaman = Peminjaman::count();
 
         // Total pengembalian
         $totalPengembalian = Peminjaman::whereNotNull('tanggal_kembali')->count();
 
-        // Total denda (contoh: 1000 / hari telat)
-        $totalDenda = Peminjaman::whereNotNull('tanggal_kembali')
-            ->whereColumn('tanggal_kembali', '>', 'jatuh_tempo')
-            ->get()
-            ->sum(function ($p) {
-                $hariTelat = Carbon::parse($p->tanggal_kembali)
-                    ->diffInDays(Carbon::parse($p->jatuh_tempo));
-                return $hariTelat * 1000;
-            });
+        //  TOTAL DENDA (KHUSUS YANG SUDAH DIKEMBALIKAN & TERLAMBAT)
+        $totalDenda = 0;
 
-        // DATA TERAKHIR (BIAR GA RAMAI)
-        $recentPeminjaman = Peminjaman::latest()->take(5)->get();
+        foreach ($peminjamans as $p) {
+            if ($p->tanggal_kembali) {
+
+                // cek apakah dia terlambat
+                if ($p->tanggal_kembali > $p->jatuh_tempo) {
+
+                    $hariTerlambat = Carbon::parse($p->jatuh_tempo)
+                        ->diffInDays(Carbon::parse($p->tanggal_kembali));
+
+                    $totalDenda += $hariTerlambat * 5000;
+                }
+            }
+        }
+
+        // Aktivitas (ambil semua)
+        $recentPeminjaman = Peminjaman::latest()->get();
 
         return view('admin.dashboard', compact(
+            'peminjamans',
             'totalPeminjaman',
             'totalPengembalian',
             'totalDenda',

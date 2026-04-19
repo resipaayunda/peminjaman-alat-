@@ -9,19 +9,22 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-        $table->string('role')->default('peminjam');
-    });
-    }
+        Schema::table('barangs', function (Blueprint $table) {
+            $table->foreignId('kategori_id')
+                ->nullable()
+                ->constrained('kategoris')
+                ->onDelete('cascade'); 
+        });
+    } 
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('barangs', function (Blueprint $table) {
             //
         });
     }

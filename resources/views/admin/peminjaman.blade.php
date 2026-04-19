@@ -7,7 +7,7 @@
 @endphp
 
 <div class="container-fluid px-4">
-    <h1 class="mt-4 mb-4 h3 fw-bold text-gray-800">Peminjaman</h1>
+    <h1 class="mt-4 mb-4 h3 fw-bold text-gray-800">Daftar Peminjaman</h1>
 
     {{-- STATISTIK --}}
     <div class="row g-3 mb-4">
@@ -53,7 +53,6 @@
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h6 class="m-0 fw-bold text-primary">Daftar Peminjaman</h6>
 
-            {{-- TOMBOL TAMBAH --}}
             <button class="btn btn-primary btn-sm"
                     data-bs-toggle="modal"
                     data-bs-target="#modalPinjam">
@@ -65,7 +64,8 @@
             <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
-                        <th class="ps-4">Nama</th>
+                        <th class="ps-4">No</th> {{-- ✅ TAMBAHAN --}}
+                        <th>Nama</th>
                         <th>Barang</th>
                         <th>Tgl Pinjam</th>
                         <th>Jatuh Tempo</th>
@@ -83,7 +83,11 @@
                 @endphp
 
                 <tr>
-                    <td class="ps-4 fw-bold">{{ $p->nama_peminjam }}</td>
+                    <td class="ps-4 text-muted">
+                        {{ $loop->iteration }}
+                    </td>
+
+                    <td class="fw-bold">{{ $p->nama_peminjam }}</td>
                     <td>{{ $p->barang }}</td>
                     <td>{{ Carbon::parse($p->tanggal_pinjam)->format('d M Y') }}</td>
                     <td>{{ $jatuhTempo->format('d M Y') }}</td>
@@ -93,7 +97,6 @@
                             : '-' }}
                     </td>
 
-                    {{-- STATUS --}}
                     <td>
                         @if ($p->tanggal_kembali)
                             <span class="badge bg-success px-3">Kembali</span>
@@ -104,9 +107,7 @@
                         @endif
                     </td>
 
-                    {{-- AKSI --}}
                     <td class="text-center">
-                        {{-- Kembalikan --}}
                         @if (is_null($p->tanggal_kembali))
                         <form action="{{ route('admin.peminjaman.update', $p->id) }}"
                               method="POST" class="d-inline">
@@ -125,7 +126,6 @@
                             <i class="fas fa-edit"></i>
                         </button>
 
-                        {{-- Hapus --}}
                         @if ($p->tanggal_kembali || $terlambat)
                         <form action="{{ route('admin.peminjaman.destroy', $p->id) }}"
                               method="POST" class="d-inline">
@@ -141,7 +141,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="text-center text-muted py-4">
+                    <td colspan="8" class="text-center text-muted py-4">
                         Belum ada data
                     </td>
                 </tr>
@@ -200,7 +200,7 @@
     </div>
 </div>
 
-{{-- MODAL EDIT PEMINJAMAN --}}
+{{-- MODAL EDIT --}}
 @foreach ($peminjamans as $p)
 <div class="modal fade" id="editModal{{ $p->id }}" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">

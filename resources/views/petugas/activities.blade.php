@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.petugas')
 
 @section('content')
 @php
@@ -8,8 +8,8 @@
 <div class="container-fluid px-4">
     <div class="mt-4 mb-4 d-flex justify-content-between align-items-center">
         <div>
-            <h1 class="h3 fw-bold text-dark">Log Aktivitas Admin</h1>
-            <p class="text-muted small">Catatan seluruh tindakan admin di dalam sistem.</p>
+            <h1 class="h3 fw-bold text-dark">Log Aktivitas Petugas</h1>
+            <p class="text-muted small">Catatan seluruh tindakan petugas di dalam sistem.</p>
         </div>
     </div>
 
@@ -26,7 +26,7 @@
                     <thead class="bg-light">
                         <tr class="small text-muted text-uppercase fw-bold">
                             <th class="ps-4 py-3">Waktu</th>
-                            <th>Admin</th>
+                            <th>Petugas</th>
                             <th>Aksi</th>
                             <th>Modul</th>
                             <th>Status</th>
@@ -36,24 +36,20 @@
                         @forelse ($activities as $log)
                         <tr>
                             <td class="ps-4">
-                                @php
-                                    $waktu = Carbon::parse($log->created_at)->setTimezone('Asia/Jakarta');
-                                @endphp
-
                                 <div class="small fw-bold text-dark">
-                                    {{ $waktu->format('d M Y') }}
+                                    {{ Carbon::parse($log->created_at)->format('d M Y') }}
                                 </div>
                                 <div class="text-muted small">
-                                    {{ $waktu->format('H:i:s') }} WIB
+                                    {{ Carbon::parse($log->created_at)->format('H:i:s') }} WIB
                                 </div>
                             </td>
 
                             <td>
                                 <div class="fw-bold small text-dark">
-                                    {{ $log->admin->name ?? '-' }}
+                                    {{ $log->petugas->name ?? '-' }}
                                 </div>
                                 <div class="text-muted small">
-                                    {{ $log->admin->role ?? '-' }}
+                                    {{ $log->petugas->role ?? '-' }}
                                 </div>
                             </td>
 
@@ -67,13 +63,17 @@
                                 </span>
                             </td>
 
-                            <td class="text-center">
+                           <td class="text-center">
                                 @if($log->action == 'delete')
                                     <i class="fas fa-circle text-danger"></i>
                                 @elseif($log->action == 'create')
                                     <i class="fas fa-circle text-success"></i>
                                 @elseif($log->action == 'update')
                                     <i class="fas fa-circle text-warning"></i>
+                                @elseif($log->action == 'login')
+                                    <i class="fas fa-circle text-primary"></i>
+                                @elseif($log->action == 'logout')
+                                    <i class="fas fa-circle text-dark"></i>
                                 @else
                                     <i class="fas fa-circle text-secondary"></i>
                                 @endif
@@ -82,7 +82,7 @@
                         @empty
                         <tr>
                             <td colspan="5" class="text-center py-5 text-muted">
-                                Belum ada aktivitas admin.
+                                Belum ada aktivitas petugas.
                             </td>
                         </tr>
                         @endforelse
@@ -98,4 +98,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection
